@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "react": "18.3.1",
-    "react-native": "0.76.0",
+    "react-native": "0.85.3",
     "@react-navigation/native": "^7.0.0",
     "@react-navigation/bottom-tabs": "^7.0.0",
     "@react-navigation/native-stack": "^7.0.0",
