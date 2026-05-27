@@ -11,7 +11,7 @@
     "start": "react-native start"
   },
   "dependencies": {
-    "react": "18.3.1",
+    "react": "19.2.6",
     "react-native": "0.76.0",
     "@react-navigation/native": "^7.0.0",
     "@react-navigation/bottom-tabs": "^7.0.0",
@@ -29,7 +29,7 @@
     "@babel/core": "^7.25.0",
     "@babel/preset-env": "^7.25.0",
     "@babel/runtime": "^7.25.0",
-    "@types/react": "^18.3.0",
+    "@types/react": "^19.2.15",
     "@types/react-test-renderer": "^18.3.0",
     "typescript": "^5.6.0",
     "eslint": "^8.57.0",
