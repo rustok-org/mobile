@@ -3,50 +3,75 @@ name: Mobile CI
 on:
   pull_request:
     branches: [main]
-    paths:
-      - 'mobile/**'
   push:
     branches: [main]
-    paths:
-      - 'mobile/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   typecheck:
+    name: TypeScript
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '22'
-      - run: cd mobile && npm ci && npm run typecheck
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run typecheck
 
   lint:
+    name: ESLint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '22'
-      - run: cd mobile && npm ci && npm run lint
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
 
   test:
+    name: Jest
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '22'
-      - run: cd mobile && npm ci && npm test
+          cache: 'npm'
+      - run: npm ci
+      - run: npm test -- --coverage
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: coverage-report
+          path: coverage/
+          if-no-files-found: ignore
 
   build-android:
+    name: Build (Android)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-java@3a4f6e1af504cf6a318a3e152e9c3ef61916e9ce # v4.7.0
         with:
           java-version: '17'
           distribution: 'temurin'
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '22'
-      - run: cd mobile && npm ci && cd android && ./gradlew assembleDebug
+          cache: 'npm'
+      - run: npm ci
+      - run: cd android && ./gradlew assembleDebug
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: android-debug-apk
+          path: android/app/build/outputs/apk/debug/
+          if-no-files-found: ignore
