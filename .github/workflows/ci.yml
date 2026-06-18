@@ -1,10 +1,11 @@
 name: Mobile CI
 
 on:
-  pull_request:
-    branches: [main]
-  push:
-    branches: [main]
+  # Mobile is a frozen scaffold pending a full rebuild. Auto-CI on every
+  # push/PR only produced red runs (no android/ dir for build-android, a
+  # placeholder app with nothing to test) plus dependabot churn. Run on demand
+  # only; restore the push/pull_request triggers when the rebuild lands.
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
