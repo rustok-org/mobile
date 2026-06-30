@@ -1,0 +1,46 @@
+{
+  "name": "react-native-rustok-bridge",
+  "version": "0.0.1",
+  "private": true,
+  "description": "TurboModule bridging rustok-mobile-bindings (org core) into React Native via uniffi (Stage 2 D1).",
+  "main": "src/index.tsx",
+  "react-native": "src/index.tsx",
+  "types": "src/index.tsx",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rustok-org/mobile.git",
+    "directory": "packages/react-native-rustok-bridge"
+  },
+  "files": [
+    "src",
+    "android",
+    "cpp",
+    "ios",
+    "*.podspec",
+    "react-native.config.js"
+  ],
+  "scripts": {
+    "ubrn:android": "ubrn build android --and-generate --config ubrn.config.yaml",
+    "ubrn:clean": "rimraf cpp android/CMakeLists.txt android/src/main/java android/src/main/jniLibs android/build android/.cxx ios src/Native* src/index.tsx src/generated"
+  },
+  "codegenConfig": {
+    "name": "RNRustokBridgeSpec",
+    "type": "modules",
+    "jsSrcsDir": "src",
+    "android": {
+      "javaPackageName": "com.rustok.bridge"
+    }
+  },
+  "dependencies": {
+    "@ubjs/core": "0.31.0-3"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*",
+    "uniffi-bindgen-react-native": "0.31.0-3"
+  },
+  "devDependencies": {
+    "uniffi-bindgen-react-native": "0.31.0-3",
+    "rimraf": "^6.0.1"
+  }
+}
