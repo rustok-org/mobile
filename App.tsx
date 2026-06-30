@@ -1,7 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { colorScheme } from 'nativewind';
 import { FfiWallet } from 'react-native-rustok-bridge';
 import './global.css';
+
+// Dark-theme-only design (mission-control). Force dark mode at startup so the
+// `.dark:root` design tokens apply. Without this NativeWind defaults to the
+// light `:root`, which renders `bg-canvas` near-white and hides the light text.
+colorScheme.set('dark');
 
 /* ─── PR-D1 proof-of-life · TEMPORARY ────────────────────────────────────────
  * TODO(D2): DELETE this whole block. It exists only to prove the ubrn FFI

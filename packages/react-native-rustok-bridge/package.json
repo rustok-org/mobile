@@ -31,6 +31,9 @@
       "javaPackageName": "com.rustok.bridge"
     }
   },
+  "dependencies": {
+    "@ubjs/core": "0.31.0-3"
+  },
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
