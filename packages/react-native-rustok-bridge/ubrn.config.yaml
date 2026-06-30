@@ -1,0 +1,13 @@
+---
+# uniffi-bindgen-react-native (ubrn) config — Stage 2 D1 bridge.
+# Points at the org mobile-bindings crate inside the vendor/core submodule.
+# condition-1: manifestPath targets ONLY the bindings crate (its dep closure =
+# crypto/keyring/sign/txguard), never the whole core workspace.
+rust:
+  directory: ../../vendor/core
+  manifestPath: crates/mobile-bindings/Cargo.toml
+android:
+  # arm64-v8a only (Captain's device). x86_64 deferred to the emulator/CI slice.
+  targets:
+    - arm64-v8a
+  apiLevel: 24

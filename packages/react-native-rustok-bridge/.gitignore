@@ -1,0 +1,15 @@
+# Native build artifacts — rebuilt by `npm run ubrn:android` (needs rust + NDK).
+# The generated TS / C++ / Kotlin / gradle bindings ARE committed, so the app
+# type-checks and the bridge is reviewable without the rust toolchain; only the
+# compiled binary and build dirs are ignored.
+**/jniLibs/
+*.a
+*.so
+android/build/
+android/.cxx/
+android/.gradle/
+build/
+lib/
+node_modules/
+local.properties
+.DS_Store
