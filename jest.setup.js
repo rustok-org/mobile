@@ -17,14 +17,10 @@ jest.mock('react-native-safe-area-context', () => ({
   useSafeAreaFrame: () => ({ x: 0, y: 0, width: 390, height: 844 }),
 }));
 
-// Native uniffi FFI bridge (ubrn turbo-module) — boundary mock for Jest. There
-// is no native module under Node, and the real `src/index.tsx` installs the
-// Rust crate at import time. Return a CLEARLY-FAKE address: the on-device run is
-// the falsifiable proof, not Jest, so the rendered surface must not pass here.
-jest.mock('react-native-rustok-bridge', () => ({
-  FfiWallet: {
-    importMnemonic: () => ({
-      address: () => '0xJEST_MOCK_not_a_real_derivation',
-    }),
-  },
-}));
+// Native boundary mocks (no native modules under Node). The contract mocks live
+// in `__mocks__/` and are stateful — the on-device run is the falsifiable crypto
+// proof, not Jest. See `__mocks__/react-native-rustok-bridge.ts` (secret-decrypts-
+// blob contract) and `__mocks__/react-native-keychain.ts` (in-memory keychain).
+jest.mock('react-native-rustok-bridge');
+jest.mock('react-native-keychain');
+jest.mock('react-native-mmkv');
