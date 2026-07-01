@@ -33,6 +33,7 @@ import {
   pointerLiteralSymbol,
   uniffiCreateFfiConverterString,
   uniffiCreateRecord,
+  uniffiRustCallAsync,
   uniffiTypeNameSymbol,
   variantOrdinalSymbol,
 } from '@ubjs/core';
@@ -1550,6 +1551,19 @@ export interface FfiWalletLike {
     value: string,
   ): /*throws*/ AnalysisRecord;
   /**
+   * Exports the encrypted keystore as opaque bytes for on-device persistence.
+   *
+   * The bytes are a serialized [`ExportedKeyring`]: key metadata plus the
+   * **encrypted** private-key blob (never the plaintext key or the mnemonic).
+   * Store them on the device and reload with [`FfiWallet::import_keystore`];
+   * the foreign side treats them as opaque.
+   *
+   * # Errors
+   *
+   * Returns [`FfiError::Wallet`] if the keystore cannot be serialized.
+   */
+  exportKeystore(): /*throws*/ ArrayBuffer;
+  /**
    * Signs an EIP-1559 transaction on-device; returns raw EIP-2718 bytes ready
    * to broadcast.
    *
@@ -1560,7 +1574,8 @@ export interface FfiWalletLike {
   signEip1559Tx(
     password: ArrayBuffer,
     req: FfiEip1559Request,
-  ): /*throws*/ ArrayBuffer;
+    asyncOpts_?: { signal: AbortSignal },
+  ): /*throws*/ Promise<ArrayBuffer>;
   /**
    * Signs a legacy transaction on-device; returns raw EIP-2718 bytes ready to
    * broadcast. `chain_id` is mandatory (EIP-155 replay protection). Same
@@ -1569,14 +1584,17 @@ export interface FfiWalletLike {
   signLegacyTx(
     password: ArrayBuffer,
     req: FfiLegacyRequest,
-  ): /*throws*/ ArrayBuffer;
+    asyncOpts_?: { signal: AbortSignal },
+  ): /*throws*/ Promise<ArrayBuffer>;
   /**
-   * Signs an EIP-191 message; returns the 65-byte signature.
+   * Signs an EIP-191 message; returns the 65-byte signature. The unlock
+   * (Argon2id) runs on a worker thread, off the foreign caller's thread.
    */
   signMessage(
     password: ArrayBuffer,
     message: ArrayBuffer,
-  ): /*throws*/ ArrayBuffer;
+    asyncOpts_?: { signal: AbortSignal },
+  ): /*throws*/ Promise<ArrayBuffer>;
 }
 /**
  * @deprecated Use `FfiWalletLike` instead.
@@ -1599,30 +1617,118 @@ export class FfiWallet extends UniffiAbstractObject implements FfiWalletLike {
   }
 
   /**
-   * Loads a wallet from an existing BIP-39 mnemonic.
+   * Loads a wallet from a previously exported keystore (app-restart / unlock).
+   *
+   * `bytes` is the opaque blob returned by [`FfiWallet::export_keystore`];
+   * `password` is the keystore password. The blob is decrypted and its address
+   * is checked against the stored metadata (anti-tamper) — no mnemonic needed.
+   *
+   * # Errors
+   *
+   * Returns [`FfiError::InvalidInput`] if `bytes` is not a valid keystore or
+   * the password is not UTF-8; [`FfiError::Wallet`] if the password is wrong,
+   * the blob is corrupt, or the address does not match the metadata.
    */
-  static importMnemonic(
-    phrase: string,
+  static async importKeystore(
+    bytes: ArrayBuffer,
     password: ArrayBuffer,
-  ): FfiWalletLike /*throws*/ {
-    return FfiConverterTypeFfiWallet.lift(
-      uniffiCaller.rustCallWithError(
-        /*liftError:*/ FfiConverterTypeFfiError.lift.bind(
+    asyncOpts_?: { signal: AbortSignal },
+  ): Promise<FfiWalletLike> /*throws*/ {
+    const __stack = uniffiIsDebug ? new Error().stack : undefined;
+    try {
+      return await uniffiRustCallAsync(
+        /*rustCaller:*/ uniffiCaller,
+        /*rustFutureFunc:*/ () => {
+          return nativeModule().ubrn_uniffi_rustok_mobile_bindings_fn_constructor_ffiwallet_import_keystore(
+            FfiConverterArrayBuffer.lower(
+              bytes,
+              nativeModule().rustbuffer_alloc,
+            ),
+            FfiConverterArrayBuffer.lower(
+              password,
+              nativeModule().rustbuffer_alloc,
+            ),
+          );
+        },
+        /*pollFunc:*/ nativeModule()
+          .ubrn_ffi_rustok_mobile_bindings_rust_future_poll_u64,
+        /*cancelFunc:*/ nativeModule()
+          .ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_u64,
+        /*completeFunc:*/ nativeModule()
+          .ubrn_ffi_rustok_mobile_bindings_rust_future_complete_u64,
+        /*freeFunc:*/ nativeModule()
+          .ubrn_ffi_rustok_mobile_bindings_rust_future_free_u64,
+        // Async returns always go through the JS-side converter: the
+        // FFI symbol returns the future handle (u64), and the user-level
+        // RustBuffer comes back via the shared `rust_future_complete_*`
+        // export. The bytes the runtime hands back must be deserialized
+        // here using the per-callable return-type converter.
+        /*liftFunc:*/ FfiConverterTypeFfiWallet.lift.bind(
+          FfiConverterTypeFfiWallet,
+        ),
+        /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+        /*asyncOpts:*/ asyncOpts_,
+        /*errorHandler:*/ FfiConverterTypeFfiError.lift.bind(
           FfiConverterTypeFfiError,
         ),
-        /*caller:*/ callStatus => {
+      );
+    } catch (__error: any) {
+      if (uniffiIsDebug && __error instanceof Error) {
+        __error.stack = __stack;
+      }
+      throw __error;
+    }
+  }
+
+  /**
+   * Loads a wallet from an existing BIP-39 mnemonic.
+   */
+  static async importMnemonic(
+    phrase: string,
+    password: ArrayBuffer,
+    asyncOpts_?: { signal: AbortSignal },
+  ): Promise<FfiWalletLike> /*throws*/ {
+    const __stack = uniffiIsDebug ? new Error().stack : undefined;
+    try {
+      return await uniffiRustCallAsync(
+        /*rustCaller:*/ uniffiCaller,
+        /*rustFutureFunc:*/ () => {
           return nativeModule().ubrn_uniffi_rustok_mobile_bindings_fn_constructor_ffiwallet_import_mnemonic(
             FfiConverterString.lower(phrase, nativeModule().rustbuffer_alloc),
             FfiConverterArrayBuffer.lower(
               password,
               nativeModule().rustbuffer_alloc,
             ),
-            callStatus,
           );
         },
+        /*pollFunc:*/ nativeModule()
+          .ubrn_ffi_rustok_mobile_bindings_rust_future_poll_u64,
+        /*cancelFunc:*/ nativeModule()
+          .ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_u64,
+        /*completeFunc:*/ nativeModule()
+          .ubrn_ffi_rustok_mobile_bindings_rust_future_complete_u64,
+        /*freeFunc:*/ nativeModule()
+          .ubrn_ffi_rustok_mobile_bindings_rust_future_free_u64,
+        // Async returns always go through the JS-side converter: the
+        // FFI symbol returns the future handle (u64), and the user-level
+        // RustBuffer comes back via the shared `rust_future_complete_*`
+        // export. The bytes the runtime hands back must be deserialized
+        // here using the per-callable return-type converter.
+        /*liftFunc:*/ FfiConverterTypeFfiWallet.lift.bind(
+          FfiConverterTypeFfiWallet,
+        ),
         /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
-      ),
-    );
+        /*asyncOpts:*/ asyncOpts_,
+        /*errorHandler:*/ FfiConverterTypeFfiError.lift.bind(
+          FfiConverterTypeFfiError,
+        ),
+      );
+    } catch (__error: any) {
+      if (uniffiIsDebug && __error instanceof Error) {
+        __error.stack = __stack;
+      }
+      throw __error;
+    }
   }
 
   /**
@@ -1689,17 +1795,18 @@ export class FfiWallet extends UniffiAbstractObject implements FfiWalletLike {
   }
 
   /**
-   * Signs an EIP-1559 transaction on-device; returns raw EIP-2718 bytes ready
-   * to broadcast.
+   * Exports the encrypted keystore as opaque bytes for on-device persistence.
    *
-   * `nonce` and gas are caller-supplied (no provider on-device). This is the
-   * signing **capability**, not a safety gate: the caller (RN) MUST show the
-   * on-device [`FfiWallet::analyze`] verdict and the arm ritual before signing.
+   * The bytes are a serialized [`ExportedKeyring`]: key metadata plus the
+   * **encrypted** private-key blob (never the plaintext key or the mnemonic).
+   * Store them on the device and reload with [`FfiWallet::import_keystore`];
+   * the foreign side treats them as opaque.
+   *
+   * # Errors
+   *
+   * Returns [`FfiError::Wallet`] if the keystore cannot be serialized.
    */
-  signEip1559Tx(
-    password: ArrayBuffer,
-    req: FfiEip1559Request,
-  ): ArrayBuffer /*throws*/ {
+  exportKeystore(): ArrayBuffer /*throws*/ {
     return ((__rb: Uint8Array) => {
       try {
         return FfiConverterArrayBuffer.lift(__rb);
@@ -1712,6 +1819,34 @@ export class FfiWallet extends UniffiAbstractObject implements FfiWalletLike {
           FfiConverterTypeFfiError,
         ),
         /*caller:*/ callStatus => {
+          return nativeModule().ubrn_uniffi_rustok_mobile_bindings_fn_method_ffiwallet_export_keystore(
+            uniffiTypeFfiWalletObjectFactory.clonePointer(this),
+            callStatus,
+          );
+        },
+        /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+      ),
+    );
+  }
+
+  /**
+   * Signs an EIP-1559 transaction on-device; returns raw EIP-2718 bytes ready
+   * to broadcast.
+   *
+   * `nonce` and gas are caller-supplied (no provider on-device). This is the
+   * signing **capability**, not a safety gate: the caller (RN) MUST show the
+   * on-device [`FfiWallet::analyze`] verdict and the arm ritual before signing.
+   */
+  async signEip1559Tx(
+    password: ArrayBuffer,
+    req: FfiEip1559Request,
+    asyncOpts_?: { signal: AbortSignal },
+  ): Promise<ArrayBuffer> /*throws*/ {
+    const __stack = uniffiIsDebug ? new Error().stack : undefined;
+    try {
+      return await uniffiRustCallAsync(
+        /*rustCaller:*/ uniffiCaller,
+        /*rustFutureFunc:*/ () => {
           return nativeModule().ubrn_uniffi_rustok_mobile_bindings_fn_method_ffiwallet_sign_eip1559_tx(
             uniffiTypeFfiWalletObjectFactory.clonePointer(this),
             FfiConverterArrayBuffer.lower(
@@ -1722,12 +1857,36 @@ export class FfiWallet extends UniffiAbstractObject implements FfiWalletLike {
               req,
               nativeModule().rustbuffer_alloc,
             ),
-            callStatus,
           );
         },
+        /*pollFunc:*/ nativeModule()
+          .ubrn_ffi_rustok_mobile_bindings_rust_future_poll_rust_buffer,
+        /*cancelFunc:*/ nativeModule()
+          .ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_rust_buffer,
+        /*completeFunc:*/ nativeModule()
+          .ubrn_ffi_rustok_mobile_bindings_rust_future_complete_rust_buffer,
+        /*freeFunc:*/ nativeModule()
+          .ubrn_ffi_rustok_mobile_bindings_rust_future_free_rust_buffer,
+        // Async returns always go through the JS-side converter: the
+        // FFI symbol returns the future handle (u64), and the user-level
+        // RustBuffer comes back via the shared `rust_future_complete_*`
+        // export. The bytes the runtime hands back must be deserialized
+        // here using the per-callable return-type converter.
+        /*liftFunc:*/ FfiConverterArrayBuffer.lift.bind(
+          FfiConverterArrayBuffer,
+        ),
         /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
-      ),
-    );
+        /*asyncOpts:*/ asyncOpts_,
+        /*errorHandler:*/ FfiConverterTypeFfiError.lift.bind(
+          FfiConverterTypeFfiError,
+        ),
+      );
+    } catch (__error: any) {
+      if (uniffiIsDebug && __error instanceof Error) {
+        __error.stack = __stack;
+      }
+      throw __error;
+    }
   }
 
   /**
@@ -1735,22 +1894,16 @@ export class FfiWallet extends UniffiAbstractObject implements FfiWalletLike {
    * broadcast. `chain_id` is mandatory (EIP-155 replay protection). Same
    * capability/ritual contract as [`FfiWallet::sign_eip1559_tx`].
    */
-  signLegacyTx(
+  async signLegacyTx(
     password: ArrayBuffer,
     req: FfiLegacyRequest,
-  ): ArrayBuffer /*throws*/ {
-    return ((__rb: Uint8Array) => {
-      try {
-        return FfiConverterArrayBuffer.lift(__rb);
-      } finally {
-        nativeModule().rustbuffer_free(__rb);
-      }
-    })(
-      uniffiCaller.rustCallWithError(
-        /*liftError:*/ FfiConverterTypeFfiError.lift.bind(
-          FfiConverterTypeFfiError,
-        ),
-        /*caller:*/ callStatus => {
+    asyncOpts_?: { signal: AbortSignal },
+  ): Promise<ArrayBuffer> /*throws*/ {
+    const __stack = uniffiIsDebug ? new Error().stack : undefined;
+    try {
+      return await uniffiRustCallAsync(
+        /*rustCaller:*/ uniffiCaller,
+        /*rustFutureFunc:*/ () => {
           return nativeModule().ubrn_uniffi_rustok_mobile_bindings_fn_method_ffiwallet_sign_legacy_tx(
             uniffiTypeFfiWalletObjectFactory.clonePointer(this),
             FfiConverterArrayBuffer.lower(
@@ -1761,33 +1914,52 @@ export class FfiWallet extends UniffiAbstractObject implements FfiWalletLike {
               req,
               nativeModule().rustbuffer_alloc,
             ),
-            callStatus,
           );
         },
+        /*pollFunc:*/ nativeModule()
+          .ubrn_ffi_rustok_mobile_bindings_rust_future_poll_rust_buffer,
+        /*cancelFunc:*/ nativeModule()
+          .ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_rust_buffer,
+        /*completeFunc:*/ nativeModule()
+          .ubrn_ffi_rustok_mobile_bindings_rust_future_complete_rust_buffer,
+        /*freeFunc:*/ nativeModule()
+          .ubrn_ffi_rustok_mobile_bindings_rust_future_free_rust_buffer,
+        // Async returns always go through the JS-side converter: the
+        // FFI symbol returns the future handle (u64), and the user-level
+        // RustBuffer comes back via the shared `rust_future_complete_*`
+        // export. The bytes the runtime hands back must be deserialized
+        // here using the per-callable return-type converter.
+        /*liftFunc:*/ FfiConverterArrayBuffer.lift.bind(
+          FfiConverterArrayBuffer,
+        ),
         /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
-      ),
-    );
+        /*asyncOpts:*/ asyncOpts_,
+        /*errorHandler:*/ FfiConverterTypeFfiError.lift.bind(
+          FfiConverterTypeFfiError,
+        ),
+      );
+    } catch (__error: any) {
+      if (uniffiIsDebug && __error instanceof Error) {
+        __error.stack = __stack;
+      }
+      throw __error;
+    }
   }
 
   /**
-   * Signs an EIP-191 message; returns the 65-byte signature.
+   * Signs an EIP-191 message; returns the 65-byte signature. The unlock
+   * (Argon2id) runs on a worker thread, off the foreign caller's thread.
    */
-  signMessage(
+  async signMessage(
     password: ArrayBuffer,
     message: ArrayBuffer,
-  ): ArrayBuffer /*throws*/ {
-    return ((__rb: Uint8Array) => {
-      try {
-        return FfiConverterArrayBuffer.lift(__rb);
-      } finally {
-        nativeModule().rustbuffer_free(__rb);
-      }
-    })(
-      uniffiCaller.rustCallWithError(
-        /*liftError:*/ FfiConverterTypeFfiError.lift.bind(
-          FfiConverterTypeFfiError,
-        ),
-        /*caller:*/ callStatus => {
+    asyncOpts_?: { signal: AbortSignal },
+  ): Promise<ArrayBuffer> /*throws*/ {
+    const __stack = uniffiIsDebug ? new Error().stack : undefined;
+    try {
+      return await uniffiRustCallAsync(
+        /*rustCaller:*/ uniffiCaller,
+        /*rustFutureFunc:*/ () => {
           return nativeModule().ubrn_uniffi_rustok_mobile_bindings_fn_method_ffiwallet_sign_message(
             uniffiTypeFfiWalletObjectFactory.clonePointer(this),
             FfiConverterArrayBuffer.lower(
@@ -1798,12 +1970,36 @@ export class FfiWallet extends UniffiAbstractObject implements FfiWalletLike {
               message,
               nativeModule().rustbuffer_alloc,
             ),
-            callStatus,
           );
         },
+        /*pollFunc:*/ nativeModule()
+          .ubrn_ffi_rustok_mobile_bindings_rust_future_poll_rust_buffer,
+        /*cancelFunc:*/ nativeModule()
+          .ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_rust_buffer,
+        /*completeFunc:*/ nativeModule()
+          .ubrn_ffi_rustok_mobile_bindings_rust_future_complete_rust_buffer,
+        /*freeFunc:*/ nativeModule()
+          .ubrn_ffi_rustok_mobile_bindings_rust_future_free_rust_buffer,
+        // Async returns always go through the JS-side converter: the
+        // FFI symbol returns the future handle (u64), and the user-level
+        // RustBuffer comes back via the shared `rust_future_complete_*`
+        // export. The bytes the runtime hands back must be deserialized
+        // here using the per-callable return-type converter.
+        /*liftFunc:*/ FfiConverterArrayBuffer.lift.bind(
+          FfiConverterArrayBuffer,
+        ),
         /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
-      ),
-    );
+        /*asyncOpts:*/ asyncOpts_,
+        /*errorHandler:*/ FfiConverterTypeFfiError.lift.bind(
+          FfiConverterTypeFfiError,
+        ),
+      );
+    } catch (__error: any) {
+      if (uniffiIsDebug && __error instanceof Error) {
+        __error.stack = __stack;
+      }
+      throw __error;
+    }
   }
 
   uniffiDestroy(): void {
@@ -1925,8 +2121,16 @@ function uniffiEnsureInitialized() {
     );
   }
   if (
+    nativeModule().ubrn_uniffi_rustok_mobile_bindings_checksum_constructor_ffiwallet_import_keystore() !==
+    31223
+  ) {
+    throw new UniffiInternalError.ApiChecksumMismatch(
+      'uniffi_rustok_mobile_bindings_checksum_constructor_ffiwallet_import_keystore',
+    );
+  }
+  if (
     nativeModule().ubrn_uniffi_rustok_mobile_bindings_checksum_constructor_ffiwallet_import_mnemonic() !==
-    63312
+    27333
   ) {
     throw new UniffiInternalError.ApiChecksumMismatch(
       'uniffi_rustok_mobile_bindings_checksum_constructor_ffiwallet_import_mnemonic',
@@ -1949,8 +2153,16 @@ function uniffiEnsureInitialized() {
     );
   }
   if (
+    nativeModule().ubrn_uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_export_keystore() !==
+    44397
+  ) {
+    throw new UniffiInternalError.ApiChecksumMismatch(
+      'uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_export_keystore',
+    );
+  }
+  if (
     nativeModule().ubrn_uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_sign_eip1559_tx() !==
-    47646
+    47920
   ) {
     throw new UniffiInternalError.ApiChecksumMismatch(
       'uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_sign_eip1559_tx',
@@ -1958,7 +2170,7 @@ function uniffiEnsureInitialized() {
   }
   if (
     nativeModule().ubrn_uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_sign_legacy_tx() !==
-    33841
+    8066
   ) {
     throw new UniffiInternalError.ApiChecksumMismatch(
       'uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_sign_legacy_tx',
@@ -1966,7 +2178,7 @@ function uniffiEnsureInitialized() {
   }
   if (
     nativeModule().ubrn_uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_sign_message() !==
-    30276
+    15768
   ) {
     throw new UniffiInternalError.ApiChecksumMismatch(
       'uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_sign_message',
