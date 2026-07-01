@@ -180,10 +180,13 @@ interface NativeModuleInterface {
     wordCount: Uint8Array,
     uniffi_out_err: UniffiRustCallStatus,
   ): Uint8Array;
+  ubrn_uniffi_rustok_mobile_bindings_fn_constructor_ffiwallet_import_keystore(
+    bytes: Uint8Array,
+    password: Uint8Array,
+  ): bigint;
   ubrn_uniffi_rustok_mobile_bindings_fn_constructor_ffiwallet_import_mnemonic(
     phrase: Uint8Array,
     password: Uint8Array,
-    uniffi_out_err: UniffiRustCallStatus,
   ): bigint;
   ubrn_uniffi_rustok_mobile_bindings_fn_method_ffiwallet_address(
     uniffiSelf: bigint,
@@ -196,29 +199,32 @@ interface NativeModuleInterface {
     value: Uint8Array,
     uniffi_out_err: UniffiRustCallStatus,
   ): Uint8Array;
+  ubrn_uniffi_rustok_mobile_bindings_fn_method_ffiwallet_export_keystore(
+    uniffiSelf: bigint,
+    uniffi_out_err: UniffiRustCallStatus,
+  ): Uint8Array;
   ubrn_uniffi_rustok_mobile_bindings_fn_method_ffiwallet_sign_eip1559_tx(
     uniffiSelf: bigint,
     password: Uint8Array,
     req: Uint8Array,
-    uniffi_out_err: UniffiRustCallStatus,
-  ): Uint8Array;
+  ): bigint;
   ubrn_uniffi_rustok_mobile_bindings_fn_method_ffiwallet_sign_legacy_tx(
     uniffiSelf: bigint,
     password: Uint8Array,
     req: Uint8Array,
-    uniffi_out_err: UniffiRustCallStatus,
-  ): Uint8Array;
+  ): bigint;
   ubrn_uniffi_rustok_mobile_bindings_fn_method_ffiwallet_sign_message(
     uniffiSelf: bigint,
     password: Uint8Array,
     message: Uint8Array,
-    uniffi_out_err: UniffiRustCallStatus,
-  ): Uint8Array;
+  ): bigint;
   ubrn_ffi_rustok_mobile_bindings_uniffi_contract_version(): number;
   ubrn_uniffi_rustok_mobile_bindings_checksum_func_generate_wallet(): number;
+  ubrn_uniffi_rustok_mobile_bindings_checksum_constructor_ffiwallet_import_keystore(): number;
   ubrn_uniffi_rustok_mobile_bindings_checksum_constructor_ffiwallet_import_mnemonic(): number;
   ubrn_uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_address(): number;
   ubrn_uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_analyze(): number;
+  ubrn_uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_export_keystore(): number;
   ubrn_uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_sign_eip1559_tx(): number;
   ubrn_uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_sign_legacy_tx(): number;
   ubrn_uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_sign_message(): number;

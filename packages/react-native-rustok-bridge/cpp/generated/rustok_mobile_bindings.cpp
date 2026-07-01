@@ -137,10 +137,13 @@ extern "C" {
         /*handle*/ uint64_t handle, 
         RustCallStatus *uniffi_out_err
     );
+    /*handle*/ uint64_t uniffi_rustok_mobile_bindings_fn_constructor_ffiwallet_import_keystore(
+        RustBuffer bytes, 
+        RustBuffer password
+    );
     /*handle*/ uint64_t uniffi_rustok_mobile_bindings_fn_constructor_ffiwallet_import_mnemonic(
         RustBuffer phrase, 
-        RustBuffer password, 
-        RustCallStatus *uniffi_out_err
+        RustBuffer password
     );
     RustBuffer uniffi_rustok_mobile_bindings_fn_method_ffiwallet_address(
         /*handle*/ uint64_t ptr, 
@@ -153,23 +156,24 @@ extern "C" {
         RustBuffer value, 
         RustCallStatus *uniffi_out_err
     );
-    RustBuffer uniffi_rustok_mobile_bindings_fn_method_ffiwallet_sign_eip1559_tx(
+    RustBuffer uniffi_rustok_mobile_bindings_fn_method_ffiwallet_export_keystore(
         /*handle*/ uint64_t ptr, 
-        RustBuffer password, 
-        RustBuffer req, 
         RustCallStatus *uniffi_out_err
     );
-    RustBuffer uniffi_rustok_mobile_bindings_fn_method_ffiwallet_sign_legacy_tx(
+    /*handle*/ uint64_t uniffi_rustok_mobile_bindings_fn_method_ffiwallet_sign_eip1559_tx(
         /*handle*/ uint64_t ptr, 
         RustBuffer password, 
-        RustBuffer req, 
-        RustCallStatus *uniffi_out_err
+        RustBuffer req
     );
-    RustBuffer uniffi_rustok_mobile_bindings_fn_method_ffiwallet_sign_message(
+    /*handle*/ uint64_t uniffi_rustok_mobile_bindings_fn_method_ffiwallet_sign_legacy_tx(
         /*handle*/ uint64_t ptr, 
         RustBuffer password, 
-        RustBuffer message, 
-        RustCallStatus *uniffi_out_err
+        RustBuffer req
+    );
+    /*handle*/ uint64_t uniffi_rustok_mobile_bindings_fn_method_ffiwallet_sign_message(
+        /*handle*/ uint64_t ptr, 
+        RustBuffer password, 
+        RustBuffer message
     );
     RustBuffer uniffi_rustok_mobile_bindings_fn_func_generate_wallet(
         RustBuffer word_count, 
@@ -378,11 +382,15 @@ extern "C" {
     );
     uint16_t uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_analyze(
     );
+    uint16_t uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_export_keystore(
+    );
     uint16_t uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_sign_eip1559_tx(
     );
     uint16_t uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_sign_legacy_tx(
     );
     uint16_t uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_sign_message(
+    );
+    uint16_t uniffi_rustok_mobile_bindings_checksum_constructor_ffiwallet_import_keystore(
     );
     uint16_t uniffi_rustok_mobile_bindings_checksum_constructor_ffiwallet_import_mnemonic(
     );
@@ -1862,6 +1870,14 @@ NativeRustokMobileBindings::NativeRustokMobileBindings(
             return this->cpp_uniffi_rustok_mobile_bindings_fn_free_ffiwallet(rt, thisVal, args, count);
         }
     );
+    props["ubrn_uniffi_rustok_mobile_bindings_fn_constructor_ffiwallet_import_keystore"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_uniffi_rustok_mobile_bindings_fn_constructor_ffiwallet_import_keystore"),
+        2,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_uniffi_rustok_mobile_bindings_fn_constructor_ffiwallet_import_keystore(rt, thisVal, args, count);
+        }
+    );
     props["ubrn_uniffi_rustok_mobile_bindings_fn_constructor_ffiwallet_import_mnemonic"] = jsi::Function::createFromHostFunction(
         rt,
         jsi::PropNameID::forAscii(rt, "ubrn_uniffi_rustok_mobile_bindings_fn_constructor_ffiwallet_import_mnemonic"),
@@ -1884,6 +1900,14 @@ NativeRustokMobileBindings::NativeRustokMobileBindings(
         4,
         [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
             return this->cpp_uniffi_rustok_mobile_bindings_fn_method_ffiwallet_analyze(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_uniffi_rustok_mobile_bindings_fn_method_ffiwallet_export_keystore"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_uniffi_rustok_mobile_bindings_fn_method_ffiwallet_export_keystore"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_uniffi_rustok_mobile_bindings_fn_method_ffiwallet_export_keystore(rt, thisVal, args, count);
         }
     );
     props["ubrn_uniffi_rustok_mobile_bindings_fn_method_ffiwallet_sign_eip1559_tx"] = jsi::Function::createFromHostFunction(
@@ -1918,6 +1942,390 @@ NativeRustokMobileBindings::NativeRustokMobileBindings(
             return this->cpp_uniffi_rustok_mobile_bindings_fn_func_generate_wallet(rt, thisVal, args, count);
         }
     );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_poll_u8"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_poll_u8"),
+        3,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_poll_u8(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_u8"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_u8"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_cancel_u8(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_free_u8"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_free_u8"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_free_u8(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_complete_u8"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_complete_u8"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_complete_u8(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_poll_i8"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_poll_i8"),
+        3,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_poll_i8(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_i8"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_i8"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_cancel_i8(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_free_i8"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_free_i8"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_free_i8(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_complete_i8"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_complete_i8"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_complete_i8(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_poll_u16"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_poll_u16"),
+        3,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_poll_u16(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_u16"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_u16"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_cancel_u16(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_free_u16"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_free_u16"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_free_u16(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_complete_u16"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_complete_u16"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_complete_u16(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_poll_i16"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_poll_i16"),
+        3,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_poll_i16(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_i16"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_i16"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_cancel_i16(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_free_i16"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_free_i16"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_free_i16(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_complete_i16"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_complete_i16"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_complete_i16(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_poll_u32"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_poll_u32"),
+        3,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_poll_u32(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_u32"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_u32"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_cancel_u32(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_free_u32"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_free_u32"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_free_u32(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_complete_u32"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_complete_u32"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_complete_u32(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_poll_i32"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_poll_i32"),
+        3,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_poll_i32(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_i32"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_i32"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_cancel_i32(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_free_i32"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_free_i32"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_free_i32(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_complete_i32"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_complete_i32"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_complete_i32(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_poll_u64"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_poll_u64"),
+        3,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_poll_u64(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_u64"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_u64"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_cancel_u64(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_free_u64"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_free_u64"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_free_u64(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_complete_u64"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_complete_u64"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_complete_u64(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_poll_i64"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_poll_i64"),
+        3,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_poll_i64(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_i64"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_i64"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_cancel_i64(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_free_i64"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_free_i64"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_free_i64(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_complete_i64"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_complete_i64"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_complete_i64(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_poll_f32"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_poll_f32"),
+        3,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_poll_f32(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_f32"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_f32"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_cancel_f32(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_free_f32"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_free_f32"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_free_f32(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_complete_f32"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_complete_f32"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_complete_f32(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_poll_f64"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_poll_f64"),
+        3,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_poll_f64(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_f64"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_f64"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_cancel_f64(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_free_f64"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_free_f64"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_free_f64(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_complete_f64"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_complete_f64"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_complete_f64(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_poll_rust_buffer"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_poll_rust_buffer"),
+        3,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_poll_rust_buffer(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_rust_buffer"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_rust_buffer"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_cancel_rust_buffer(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_free_rust_buffer"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_free_rust_buffer"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_free_rust_buffer(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_complete_rust_buffer"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_complete_rust_buffer"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_complete_rust_buffer(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_poll_void"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_poll_void"),
+        3,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_poll_void(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_void"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_cancel_void"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_cancel_void(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_free_void"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_free_void"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_free_void(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_ffi_rustok_mobile_bindings_rust_future_complete_void"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_ffi_rustok_mobile_bindings_rust_future_complete_void"),
+        1,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_ffi_rustok_mobile_bindings_rust_future_complete_void(rt, thisVal, args, count);
+        }
+    );
     props["ubrn_uniffi_rustok_mobile_bindings_checksum_func_generate_wallet"] = jsi::Function::createFromHostFunction(
         rt,
         jsi::PropNameID::forAscii(rt, "ubrn_uniffi_rustok_mobile_bindings_checksum_func_generate_wallet"),
@@ -1942,6 +2350,14 @@ NativeRustokMobileBindings::NativeRustokMobileBindings(
             return this->cpp_uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_analyze(rt, thisVal, args, count);
         }
     );
+    props["ubrn_uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_export_keystore"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_export_keystore"),
+        0,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_export_keystore(rt, thisVal, args, count);
+        }
+    );
     props["ubrn_uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_sign_eip1559_tx"] = jsi::Function::createFromHostFunction(
         rt,
         jsi::PropNameID::forAscii(rt, "ubrn_uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_sign_eip1559_tx"),
@@ -1964,6 +2380,14 @@ NativeRustokMobileBindings::NativeRustokMobileBindings(
         0,
         [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
             return this->cpp_uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_sign_message(rt, thisVal, args, count);
+        }
+    );
+    props["ubrn_uniffi_rustok_mobile_bindings_checksum_constructor_ffiwallet_import_keystore"] = jsi::Function::createFromHostFunction(
+        rt,
+        jsi::PropNameID::forAscii(rt, "ubrn_uniffi_rustok_mobile_bindings_checksum_constructor_ffiwallet_import_keystore"),
+        0,
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
+            return this->cpp_uniffi_rustok_mobile_bindings_checksum_constructor_ffiwallet_import_keystore(rt, thisVal, args, count);
         }
     );
     props["ubrn_uniffi_rustok_mobile_bindings_checksum_constructor_ffiwallet_import_mnemonic"] = jsi::Function::createFromHostFunction(
@@ -2159,12 +2583,16 @@ jsi::Value NativeRustokMobileBindings::cpp_uniffi_rustok_mobile_bindings_fn_free
         
         return jsi::Value::undefined();
 }
-jsi::Value NativeRustokMobileBindings::cpp_uniffi_rustok_mobile_bindings_fn_constructor_ffiwallet_import_mnemonic(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
-        RustCallStatus status = uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::rustSuccess(rt);
-        auto value = uniffi_rustok_mobile_bindings_fn_constructor_ffiwallet_import_mnemonic(uniffi::rustok_mobile_bindings::Bridging<RustBuffer>::fromJs(rt, callInvoker, args[0]), uniffi::rustok_mobile_bindings::Bridging<RustBuffer>::fromJs(rt, callInvoker, args[1]), 
-            &status
+jsi::Value NativeRustokMobileBindings::cpp_uniffi_rustok_mobile_bindings_fn_constructor_ffiwallet_import_keystore(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        auto value = uniffi_rustok_mobile_bindings_fn_constructor_ffiwallet_import_keystore(uniffi::rustok_mobile_bindings::Bridging<RustBuffer>::fromJs(rt, callInvoker, args[0]), uniffi::rustok_mobile_bindings::Bridging<RustBuffer>::fromJs(rt, callInvoker, args[1])
         );
-        uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::copyIntoJs(rt, callInvoker, status, args[count - 1]);
+
+        
+        return uniffi_jsi::Bridging</*handle*/ uint64_t>::toJs(rt, callInvoker, value);
+}
+jsi::Value NativeRustokMobileBindings::cpp_uniffi_rustok_mobile_bindings_fn_constructor_ffiwallet_import_mnemonic(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        auto value = uniffi_rustok_mobile_bindings_fn_constructor_ffiwallet_import_mnemonic(uniffi::rustok_mobile_bindings::Bridging<RustBuffer>::fromJs(rt, callInvoker, args[0]), uniffi::rustok_mobile_bindings::Bridging<RustBuffer>::fromJs(rt, callInvoker, args[1])
+        );
 
         
         return uniffi_jsi::Bridging</*handle*/ uint64_t>::toJs(rt, callInvoker, value);
@@ -2189,35 +2617,36 @@ jsi::Value NativeRustokMobileBindings::cpp_uniffi_rustok_mobile_bindings_fn_meth
         
         return uniffi::rustok_mobile_bindings::Bridging<RustBuffer>::toJs(rt, callInvoker, value);
 }
-jsi::Value NativeRustokMobileBindings::cpp_uniffi_rustok_mobile_bindings_fn_method_ffiwallet_sign_eip1559_tx(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+jsi::Value NativeRustokMobileBindings::cpp_uniffi_rustok_mobile_bindings_fn_method_ffiwallet_export_keystore(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
         RustCallStatus status = uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::rustSuccess(rt);
-        auto value = uniffi_rustok_mobile_bindings_fn_method_ffiwallet_sign_eip1559_tx(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), uniffi::rustok_mobile_bindings::Bridging<RustBuffer>::fromJs(rt, callInvoker, args[1]), uniffi::rustok_mobile_bindings::Bridging<RustBuffer>::fromJs(rt, callInvoker, args[2]), 
+        auto value = uniffi_rustok_mobile_bindings_fn_method_ffiwallet_export_keystore(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), 
             &status
         );
         uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::copyIntoJs(rt, callInvoker, status, args[count - 1]);
 
         
         return uniffi::rustok_mobile_bindings::Bridging<RustBuffer>::toJs(rt, callInvoker, value);
+}
+jsi::Value NativeRustokMobileBindings::cpp_uniffi_rustok_mobile_bindings_fn_method_ffiwallet_sign_eip1559_tx(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        auto value = uniffi_rustok_mobile_bindings_fn_method_ffiwallet_sign_eip1559_tx(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), uniffi::rustok_mobile_bindings::Bridging<RustBuffer>::fromJs(rt, callInvoker, args[1]), uniffi::rustok_mobile_bindings::Bridging<RustBuffer>::fromJs(rt, callInvoker, args[2])
+        );
+
+        
+        return uniffi_jsi::Bridging</*handle*/ uint64_t>::toJs(rt, callInvoker, value);
 }
 jsi::Value NativeRustokMobileBindings::cpp_uniffi_rustok_mobile_bindings_fn_method_ffiwallet_sign_legacy_tx(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
-        RustCallStatus status = uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::rustSuccess(rt);
-        auto value = uniffi_rustok_mobile_bindings_fn_method_ffiwallet_sign_legacy_tx(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), uniffi::rustok_mobile_bindings::Bridging<RustBuffer>::fromJs(rt, callInvoker, args[1]), uniffi::rustok_mobile_bindings::Bridging<RustBuffer>::fromJs(rt, callInvoker, args[2]), 
-            &status
+        auto value = uniffi_rustok_mobile_bindings_fn_method_ffiwallet_sign_legacy_tx(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), uniffi::rustok_mobile_bindings::Bridging<RustBuffer>::fromJs(rt, callInvoker, args[1]), uniffi::rustok_mobile_bindings::Bridging<RustBuffer>::fromJs(rt, callInvoker, args[2])
         );
-        uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::copyIntoJs(rt, callInvoker, status, args[count - 1]);
 
         
-        return uniffi::rustok_mobile_bindings::Bridging<RustBuffer>::toJs(rt, callInvoker, value);
+        return uniffi_jsi::Bridging</*handle*/ uint64_t>::toJs(rt, callInvoker, value);
 }
 jsi::Value NativeRustokMobileBindings::cpp_uniffi_rustok_mobile_bindings_fn_method_ffiwallet_sign_message(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
-        RustCallStatus status = uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::rustSuccess(rt);
-        auto value = uniffi_rustok_mobile_bindings_fn_method_ffiwallet_sign_message(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), uniffi::rustok_mobile_bindings::Bridging<RustBuffer>::fromJs(rt, callInvoker, args[1]), uniffi::rustok_mobile_bindings::Bridging<RustBuffer>::fromJs(rt, callInvoker, args[2]), 
-            &status
+        auto value = uniffi_rustok_mobile_bindings_fn_method_ffiwallet_sign_message(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), uniffi::rustok_mobile_bindings::Bridging<RustBuffer>::fromJs(rt, callInvoker, args[1]), uniffi::rustok_mobile_bindings::Bridging<RustBuffer>::fromJs(rt, callInvoker, args[2])
         );
-        uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::copyIntoJs(rt, callInvoker, status, args[count - 1]);
 
         
-        return uniffi::rustok_mobile_bindings::Bridging<RustBuffer>::toJs(rt, callInvoker, value);
+        return uniffi_jsi::Bridging</*handle*/ uint64_t>::toJs(rt, callInvoker, value);
 }
 jsi::Value NativeRustokMobileBindings::cpp_uniffi_rustok_mobile_bindings_fn_func_generate_wallet(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
         RustCallStatus status = uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::rustSuccess(rt);
@@ -2228,6 +2657,378 @@ jsi::Value NativeRustokMobileBindings::cpp_uniffi_rustok_mobile_bindings_fn_func
 
         
         return uniffi::rustok_mobile_bindings::Bridging<RustBuffer>::toJs(rt, callInvoker, value);
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_poll_u8(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_poll_u8(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), uniffi::rustok_mobile_bindings::Bridging<UniffiRustFutureContinuationCallback>::fromJs(rt, callInvoker, args[1]), uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[2])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_cancel_u8(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_cancel_u8(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_free_u8(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_free_u8(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_complete_u8(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        RustCallStatus status = uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::rustSuccess(rt);
+        auto value = ffi_rustok_mobile_bindings_rust_future_complete_u8(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), 
+            &status
+        );
+        uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::copyIntoJs(rt, callInvoker, status, args[count - 1]);
+
+        
+        return uniffi_jsi::Bridging<uint8_t>::toJs(rt, callInvoker, value);
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_poll_i8(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_poll_i8(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), uniffi::rustok_mobile_bindings::Bridging<UniffiRustFutureContinuationCallback>::fromJs(rt, callInvoker, args[1]), uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[2])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_cancel_i8(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_cancel_i8(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_free_i8(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_free_i8(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_complete_i8(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        RustCallStatus status = uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::rustSuccess(rt);
+        auto value = ffi_rustok_mobile_bindings_rust_future_complete_i8(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), 
+            &status
+        );
+        uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::copyIntoJs(rt, callInvoker, status, args[count - 1]);
+
+        
+        return uniffi_jsi::Bridging<int8_t>::toJs(rt, callInvoker, value);
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_poll_u16(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_poll_u16(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), uniffi::rustok_mobile_bindings::Bridging<UniffiRustFutureContinuationCallback>::fromJs(rt, callInvoker, args[1]), uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[2])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_cancel_u16(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_cancel_u16(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_free_u16(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_free_u16(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_complete_u16(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        RustCallStatus status = uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::rustSuccess(rt);
+        auto value = ffi_rustok_mobile_bindings_rust_future_complete_u16(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), 
+            &status
+        );
+        uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::copyIntoJs(rt, callInvoker, status, args[count - 1]);
+
+        
+        return uniffi_jsi::Bridging<uint16_t>::toJs(rt, callInvoker, value);
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_poll_i16(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_poll_i16(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), uniffi::rustok_mobile_bindings::Bridging<UniffiRustFutureContinuationCallback>::fromJs(rt, callInvoker, args[1]), uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[2])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_cancel_i16(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_cancel_i16(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_free_i16(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_free_i16(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_complete_i16(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        RustCallStatus status = uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::rustSuccess(rt);
+        auto value = ffi_rustok_mobile_bindings_rust_future_complete_i16(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), 
+            &status
+        );
+        uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::copyIntoJs(rt, callInvoker, status, args[count - 1]);
+
+        
+        return uniffi_jsi::Bridging<int16_t>::toJs(rt, callInvoker, value);
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_poll_u32(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_poll_u32(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), uniffi::rustok_mobile_bindings::Bridging<UniffiRustFutureContinuationCallback>::fromJs(rt, callInvoker, args[1]), uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[2])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_cancel_u32(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_cancel_u32(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_free_u32(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_free_u32(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_complete_u32(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        RustCallStatus status = uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::rustSuccess(rt);
+        auto value = ffi_rustok_mobile_bindings_rust_future_complete_u32(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), 
+            &status
+        );
+        uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::copyIntoJs(rt, callInvoker, status, args[count - 1]);
+
+        
+        return uniffi_jsi::Bridging<uint32_t>::toJs(rt, callInvoker, value);
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_poll_i32(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_poll_i32(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), uniffi::rustok_mobile_bindings::Bridging<UniffiRustFutureContinuationCallback>::fromJs(rt, callInvoker, args[1]), uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[2])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_cancel_i32(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_cancel_i32(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_free_i32(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_free_i32(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_complete_i32(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        RustCallStatus status = uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::rustSuccess(rt);
+        auto value = ffi_rustok_mobile_bindings_rust_future_complete_i32(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), 
+            &status
+        );
+        uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::copyIntoJs(rt, callInvoker, status, args[count - 1]);
+
+        
+        return uniffi_jsi::Bridging<int32_t>::toJs(rt, callInvoker, value);
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_poll_u64(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_poll_u64(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), uniffi::rustok_mobile_bindings::Bridging<UniffiRustFutureContinuationCallback>::fromJs(rt, callInvoker, args[1]), uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[2])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_cancel_u64(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_cancel_u64(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_free_u64(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_free_u64(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_complete_u64(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        RustCallStatus status = uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::rustSuccess(rt);
+        auto value = ffi_rustok_mobile_bindings_rust_future_complete_u64(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), 
+            &status
+        );
+        uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::copyIntoJs(rt, callInvoker, status, args[count - 1]);
+
+        
+        return uniffi_jsi::Bridging<uint64_t>::toJs(rt, callInvoker, value);
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_poll_i64(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_poll_i64(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), uniffi::rustok_mobile_bindings::Bridging<UniffiRustFutureContinuationCallback>::fromJs(rt, callInvoker, args[1]), uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[2])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_cancel_i64(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_cancel_i64(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_free_i64(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_free_i64(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_complete_i64(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        RustCallStatus status = uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::rustSuccess(rt);
+        auto value = ffi_rustok_mobile_bindings_rust_future_complete_i64(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), 
+            &status
+        );
+        uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::copyIntoJs(rt, callInvoker, status, args[count - 1]);
+
+        
+        return uniffi_jsi::Bridging<int64_t>::toJs(rt, callInvoker, value);
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_poll_f32(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_poll_f32(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), uniffi::rustok_mobile_bindings::Bridging<UniffiRustFutureContinuationCallback>::fromJs(rt, callInvoker, args[1]), uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[2])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_cancel_f32(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_cancel_f32(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_free_f32(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_free_f32(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_complete_f32(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        RustCallStatus status = uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::rustSuccess(rt);
+        auto value = ffi_rustok_mobile_bindings_rust_future_complete_f32(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), 
+            &status
+        );
+        uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::copyIntoJs(rt, callInvoker, status, args[count - 1]);
+
+        
+        return uniffi_jsi::Bridging<float>::toJs(rt, callInvoker, value);
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_poll_f64(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_poll_f64(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), uniffi::rustok_mobile_bindings::Bridging<UniffiRustFutureContinuationCallback>::fromJs(rt, callInvoker, args[1]), uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[2])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_cancel_f64(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_cancel_f64(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_free_f64(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_free_f64(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_complete_f64(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        RustCallStatus status = uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::rustSuccess(rt);
+        auto value = ffi_rustok_mobile_bindings_rust_future_complete_f64(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), 
+            &status
+        );
+        uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::copyIntoJs(rt, callInvoker, status, args[count - 1]);
+
+        
+        return uniffi_jsi::Bridging<double>::toJs(rt, callInvoker, value);
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_poll_rust_buffer(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_poll_rust_buffer(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), uniffi::rustok_mobile_bindings::Bridging<UniffiRustFutureContinuationCallback>::fromJs(rt, callInvoker, args[1]), uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[2])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_cancel_rust_buffer(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_cancel_rust_buffer(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_free_rust_buffer(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_free_rust_buffer(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_complete_rust_buffer(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        RustCallStatus status = uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::rustSuccess(rt);
+        auto value = ffi_rustok_mobile_bindings_rust_future_complete_rust_buffer(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), 
+            &status
+        );
+        uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::copyIntoJs(rt, callInvoker, status, args[count - 1]);
+
+        
+        return uniffi::rustok_mobile_bindings::Bridging<RustBuffer>::toJs(rt, callInvoker, value);
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_poll_void(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_poll_void(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), uniffi::rustok_mobile_bindings::Bridging<UniffiRustFutureContinuationCallback>::fromJs(rt, callInvoker, args[1]), uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[2])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_cancel_void(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_cancel_void(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_free_void(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        ffi_rustok_mobile_bindings_rust_future_free_void(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0])
+        );
+
+        
+        return jsi::Value::undefined();
+}
+jsi::Value NativeRustokMobileBindings::cpp_ffi_rustok_mobile_bindings_rust_future_complete_void(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        RustCallStatus status = uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::rustSuccess(rt);
+        ffi_rustok_mobile_bindings_rust_future_complete_void(uniffi_jsi::Bridging</*handle*/ uint64_t>::fromJs(rt, callInvoker, args[0]), 
+            &status
+        );
+        uniffi::rustok_mobile_bindings::Bridging<RustCallStatus>::copyIntoJs(rt, callInvoker, status, args[count - 1]);
+
+        
+        return jsi::Value::undefined();
 }
 jsi::Value NativeRustokMobileBindings::cpp_uniffi_rustok_mobile_bindings_checksum_func_generate_wallet(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
         auto value = uniffi_rustok_mobile_bindings_checksum_func_generate_wallet(
@@ -2250,6 +3051,13 @@ jsi::Value NativeRustokMobileBindings::cpp_uniffi_rustok_mobile_bindings_checksu
         
         return uniffi_jsi::Bridging<uint16_t>::toJs(rt, callInvoker, value);
 }
+jsi::Value NativeRustokMobileBindings::cpp_uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_export_keystore(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        auto value = uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_export_keystore(
+        );
+
+        
+        return uniffi_jsi::Bridging<uint16_t>::toJs(rt, callInvoker, value);
+}
 jsi::Value NativeRustokMobileBindings::cpp_uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_sign_eip1559_tx(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
         auto value = uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_sign_eip1559_tx(
         );
@@ -2266,6 +3074,13 @@ jsi::Value NativeRustokMobileBindings::cpp_uniffi_rustok_mobile_bindings_checksu
 }
 jsi::Value NativeRustokMobileBindings::cpp_uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_sign_message(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
         auto value = uniffi_rustok_mobile_bindings_checksum_method_ffiwallet_sign_message(
+        );
+
+        
+        return uniffi_jsi::Bridging<uint16_t>::toJs(rt, callInvoker, value);
+}
+jsi::Value NativeRustokMobileBindings::cpp_uniffi_rustok_mobile_bindings_checksum_constructor_ffiwallet_import_keystore(jsi::Runtime& rt, const jsi::Value& thisVal, const jsi::Value* args, size_t count) {
+        auto value = uniffi_rustok_mobile_bindings_checksum_constructor_ffiwallet_import_keystore(
         );
 
         
