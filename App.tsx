@@ -1,15 +1,18 @@
 import { useEffect } from 'react';
+import { Appearance } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { colorScheme } from 'nativewind';
 
 import { RootNavigator } from './src/navigation/RootNavigator';
 import { useWalletStore } from './src/stores/walletStore';
 import './global.css';
 
-// Dark-theme-only design (mission-control). Force dark at startup so the
-// `.dark:root` design tokens apply. Without this NativeWind defaults to the
-// light `:root`, which renders `bg-canvas` near-white and hides light text.
-colorScheme.set('dark');
+// Dark-only product decision (NORTH-STAR), independent of the device's
+// system theme — not a NativeWind concern (tailwind.config.js has no
+// scheme-switching to force), but the native RN Appearance state itself.
+// Without this, anything that reads the system scheme later (e.g. a
+// react-navigation NavigationContainer with no explicit `theme`) defaults
+// to the OS setting instead of staying locked dark.
+Appearance.setColorScheme('dark');
 
 function App() {
   const hydrate = useWalletStore((state) => state.hydrate);
