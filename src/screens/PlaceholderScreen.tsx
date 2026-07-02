@@ -15,9 +15,9 @@ interface PlaceholderScreenProps {
 export function PlaceholderScreen({ title, subtitle, detail }: PlaceholderScreenProps) {
   return (
     <View className="flex-1 items-center justify-center gap-2 bg-canvas px-8">
-      <Text className="text-xl text-ink-primary">{title}</Text>
-      <Text className="text-center text-sm text-ink-muted">{subtitle}</Text>
-      {detail !== undefined && <Text className="text-xs text-ink-muted">{detail}</Text>}
+      <Text className="text-xl text-textPrimary">{title}</Text>
+      <Text className="text-center text-sm text-textMuted">{subtitle}</Text>
+      {detail !== undefined && <Text className="text-xs text-textMuted">{detail}</Text>}
     </View>
   );
 }
